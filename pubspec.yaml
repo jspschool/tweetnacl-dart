@@ -1,5 +1,5 @@
 name: tweetnacl
-version: 0.3.1
+version: 0.3.2
 
 description: Port of TweetNaCl cryptographic library to Dart.
 author: Jeff Lee <jspschool@gmail.com>
