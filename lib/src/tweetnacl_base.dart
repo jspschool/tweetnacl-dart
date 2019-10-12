@@ -1493,7 +1493,7 @@ class TweetNaclFast{
     }
   }
 
-  static void _pack25519(Uint8List o, Int64List n, final int noff) {
+  static void pack25519(Uint8List o, Int64List n, final int noff) {
     int i, j, b;
     Int64List m = Int64List(16), t = Int64List(16);
     for (i = 0; i < 16; i++) t[i] = n[i + noff];
@@ -1523,8 +1523,8 @@ class TweetNaclFast{
 
   static int _neq25519_off(Int64List a, final int aoff, Int64List b, final int boff) {
     Uint8List c = Uint8List(32), d = Uint8List(32);
-    _pack25519(c, a, aoff);
-    _pack25519(d, b, boff);
+    pack25519(c, a, aoff);
+    pack25519(d, b, boff);
     return _crypto_verify_32(c, 0, d, 0);
   }
 
@@ -1534,7 +1534,7 @@ class TweetNaclFast{
 
   static int _par25519_off(Int64List a, final int aoff) {
     Uint8List d = Uint8List(32);
-    _pack25519(d, a, aoff);
+    pack25519(d, a, aoff);
     return (d[0] & 1);
   }
 
@@ -1566,10 +1566,10 @@ class TweetNaclFast{
   }
 
   static void _M(Int64List o, Int64List a, Int64List b) {
-    _M_off(o, 0, a, 0, b, 0);
+    M_off(o, 0, a, 0, b, 0);
   }
 
-  static void _M_off(Int64List o, final int ooff, Int64List a, final int aoff,
+  static void M_off(Int64List o, final int ooff, Int64List a, final int aoff,
       Int64List b, final int boff) {
     int v,
         c,
@@ -2038,7 +2038,7 @@ class TweetNaclFast{
   }
 
   static void _S_off(Int64List o, final int ooff, Int64List a, final int aoff) {
-    _M_off(o, ooff, a, aoff, a, aoff);
+    M_off(o, ooff, a, aoff, a, aoff);
   }
 
   static void _inv25519(Int64List o, final int ooff, Int64List i, final int ioff) {
@@ -2047,7 +2047,7 @@ class TweetNaclFast{
     for (a = 0; a < 16; a++) c[a] = i[a + ioff];
     for (a = 253; a >= 0; a--) {
       _S_off(c, 0, c, 0);
-      if (a != 2 && a != 4) _M_off(c, 0, c, 0, i, ioff);
+      if (a != 2 && a != 4) M_off(c, 0, c, 0, i, ioff);
     }
     for (a = 0; a < 16; a++) o[a + ooff] = c[a];
   }
@@ -2060,7 +2060,7 @@ class TweetNaclFast{
 
     for (a = 250; a >= 0; a--) {
       _S_off(c, 0, c, 0);
-      if (a != 1) _M_off(c, 0, c, 0, i, 0);
+      if (a != 1) M_off(c, 0, c, 0, i, 0);
     }
 
     for (a = 0; a < 16; a++) o[a] = c[a];
@@ -2117,8 +2117,8 @@ class TweetNaclFast{
       x[i + 64] = d[i];
     }
     _inv25519(x, 32, x, 32);
-    _M_off(x, 16, x, 16, x, 32);
-    _pack25519(q, x, 16);
+    M_off(x, 16, x, 16, x, 32);
+    pack25519(q, x, 16);
 
     return 0;
   }
@@ -2792,7 +2792,7 @@ class TweetNaclFast{
 
 // gf: long[16]
   ///private static void add(gf p[4],gf q[4])
-  static void _add(List<Int64List> p, List<Int64List> q) {
+  static void add(List<Int64List> p, List<Int64List> q) {
     Int64List a = Int64List(16);
     Int64List b = Int64List(16);
     Int64List c = Int64List(16);
@@ -2815,13 +2815,13 @@ class TweetNaclFast{
 
     _Z_off(a, 0, p1, 0, p0, 0);
     _Z_off(t, 0, q1, 0, q0, 0);
-    _M_off(a, 0, a, 0, t, 0);
+    M_off(a, 0, a, 0, t, 0);
     _A_off(b, 0, p0, 0, p1, 0);
     _A_off(t, 0, q0, 0, q1, 0);
-    _M_off(b, 0, b, 0, t, 0);
-    _M_off(c, 0, p3, 0, q3, 0);
-    _M_off(c, 0, c, 0, _D2, 0);
-    _M_off(d, 0, p2, 0, q2, 0);
+    M_off(b, 0, b, 0, t, 0);
+    M_off(c, 0, p3, 0, q3, 0);
+    M_off(c, 0, c, 0, _D2, 0);
+    M_off(d, 0, p2, 0, q2, 0);
 
     _A_off(d, 0, d, 0, d, 0);
     _Z_off(e, 0, b, 0, a, 0);
@@ -2829,10 +2829,10 @@ class TweetNaclFast{
     _A_off(g, 0, d, 0, c, 0);
     _A_off(h, 0, b, 0, a, 0);
 
-    _M_off(p0, 0, e, 0, f, 0);
-    _M_off(p1, 0, h, 0, g, 0);
-    _M_off(p2, 0, g, 0, f, 0);
-    _M_off(p3, 0, e, 0, h, 0);
+    M_off(p0, 0, e, 0, f, 0);
+    M_off(p1, 0, h, 0, g, 0);
+    M_off(p2, 0, g, 0, f, 0);
+    M_off(p3, 0, e, 0, h, 0);
   }
 
   static void _cswap(List<Int64List> p, List<Int64List> q, int b) {
@@ -2841,22 +2841,22 @@ class TweetNaclFast{
     for (i = 0; i < 4; i++) _sel25519_off(p[i], 0, q[i], 0, b);
   }
 
-  static void _pack(Uint8List r, List<Int64List> p) {
+  static void pack(Uint8List r, List<Int64List> p) {
     Int64List tx = Int64List(16);
     Int64List ty = Int64List(16);
     Int64List zi = Int64List(16);
 
     _inv25519(zi, 0, p[2], 0);
 
-    _M_off(tx, 0, p[0], 0, zi, 0);
-    _M_off(ty, 0, p[1], 0, zi, 0);
+    M_off(tx, 0, p[0], 0, zi, 0);
+    M_off(ty, 0, p[1], 0, zi, 0);
 
-    _pack25519(r, ty, 0);
+    pack25519(r, ty, 0);
 
     r[31] ^= _par25519_off(tx, 0) << 7;
   }
 
-  static void _scalarmult(
+  static void scalarmult(
       List<Int64List> p, List<Int64List> q, Uint8List s, final int soff) {
     int i;
 
@@ -2869,13 +2869,13 @@ class TweetNaclFast{
       int b = ((Int32(s[(i / 8 + soff).toInt()]).shiftRightUnsigned(i & 7)).toInt() & 1);
 
       _cswap(p, q, b);
-      _add(q, p);
-      _add(p, p);
+      add(q, p);
+      add(p, p);
       _cswap(p, q, b);
     }
   }
 
-  static void _scalarbase(List<Int64List> p, Uint8List s, final int soff) {
+  static void scalarbase(List<Int64List> p, Uint8List s, final int soff) {
     List<Int64List> q = List<Int64List>(4);
 
     q[0] = Int64List(16);
@@ -2886,8 +2886,8 @@ class TweetNaclFast{
     _set25519(q[0], _X);
     _set25519(q[1], _Y);
     _set25519(q[2], _gf1);
-    _M_off(q[3], 0, _X, 0, _Y, 0);
-    _scalarmult(p, q, s, soff);
+    M_off(q[3], 0, _X, 0, _Y, 0);
+    scalarmult(p, q, s, soff);
   }
 
   static int crypto_sign_keypair(Uint8List pk, Uint8List sk, bool seeded) {
@@ -2907,8 +2907,8 @@ class TweetNaclFast{
     d[31] &= 127;
     d[31] |= 64;
 
-    _scalarbase(p, d, 0);
-    _pack(pk, p);
+    scalarbase(p, d, 0);
+    pack(pk, p);
 
     for (i = 0; i < 32; i++) sk[i + 32] = pk[i];
     return 0;
@@ -2949,7 +2949,7 @@ class TweetNaclFast{
     0x10
   ]);
 
-  static void _modL(Uint8List r, final int roff, Int64List x) {
+  static void modL(Uint8List r, final int roff, Int64List x) {
     int carry;
     int i, j;
 
@@ -2979,7 +2979,7 @@ class TweetNaclFast{
     }
   }
 
-  static void _reduce(Uint8List r) {
+  static void reduce(Uint8List r) {
     Int64List x = Int64List(64);
     int i;
 
@@ -2987,7 +2987,7 @@ class TweetNaclFast{
 
     for (i = 0; i < 64; i++) r[i] = 0;
 
-    _modL(r, 0, x);
+    modL(r, 0, x);
   }
 
 // TBD... 64bits of n
@@ -3018,13 +3018,13 @@ class TweetNaclFast{
     for (i = 0; i < 32; i++) sm[32 + i] = d[32 + i];
 
     crypto_hash_off(r, sm, 32, n + 32);
-    _reduce(r);
-    _scalarbase(p, r, 0);
-    _pack(sm, p);
+    reduce(r);
+    scalarbase(p, r, 0);
+    pack(sm, p);
 
     for (i = 0; i < 32; i++) sm[i + 32] = sk[i + 32];
     crypto_hash_off(h, sm, 0, n + 64);
-    _reduce(h);
+    reduce(h);
 
     for (i = 0; i < 64; i++) x[i] = 0;
 
@@ -3033,12 +3033,12 @@ class TweetNaclFast{
     for (i = 0; i < 32; i++)
       for (j = 0; j < 32; j++) x[i + j] += (h[i] & 0xff) * (d[j] & 0xff).toInt();
 
-    _modL(sm, 32, x);
+    modL(sm, 32, x);
 
     return 0;
   }
 
-  static int _unpackneg(List<Int64List> r, Uint8List p) {
+  static int unpackneg(List<Int64List> r, Uint8List p) {
     Int64List t = Int64List(16);
     Int64List chk = Int64List(16);
     Int64List num = Int64List(16);
@@ -3104,7 +3104,7 @@ class TweetNaclFast{
 
     if (n < 64) return -1;
 
-    if (_unpackneg(q, pk) != 0) return -1;
+    if (unpackneg(q, pk) != 0) return -1;
 
     for (i = 0; i < n; i++) m[i] = sm[i + smoff];
 
@@ -3112,12 +3112,12 @@ class TweetNaclFast{
 
     crypto_hash_off(h, m, 0, n);
 
-    _reduce(h);
-    _scalarmult(p, q, h, 0);
+    reduce(h);
+    scalarmult(p, q, h, 0);
 
-    _scalarbase(q, sm, 32 + smoff);
-    _add(p, q);
-    _pack(t, p);
+    scalarbase(q, sm, 32 + smoff);
+    add(p, q);
+    pack(t, p);
 
     n -= 64;
     if (_crypto_verify_32(sm, smoff, t, 0) != 0) {
