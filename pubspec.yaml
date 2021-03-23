@@ -1,16 +1,16 @@
 name: tweetnacl
-version: 0.3.2
+version: 0.3.3
 
 description: Port of TweetNaCl cryptographic library to Dart.
 author: Jeff Lee <jspschool@gmail.com>
 homepage: https://github.com/jspschool/tweetnacl-dart
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  fixnum: ^0.10.9
-  convert: ^2.0.2
+  fixnum: ^1.0.0
+  convert: ^3.0.0
 
 dev_dependencies:
-  test: ^1.0.0
+  test: ^1.16.8
