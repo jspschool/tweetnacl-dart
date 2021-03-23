@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:tweetnacl/tweetnacl.dart';
 import 'dart:typed_data';
 import "dart:convert";
